@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   Button,
   Form,
@@ -10,6 +9,7 @@ import {
 } from 'semantic-ui-react';
 import Head from 'next/head';
 import NavBar from '../components/navbar';
+import Link from 'next/link';
 
 const Signup = () => (
   <>
@@ -65,7 +65,10 @@ const Signup = () => (
           </Segment>
         </Form>
         <Message>
-          Already have an account? <a href="#">Log In</a>
+          Already have an account?{' '}
+          <Link href="/login">
+            <a>Log In</a>
+          </Link>
         </Message>
       </Grid.Column>
     </Grid>
