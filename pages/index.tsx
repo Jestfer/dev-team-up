@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import NavBar from '../components/navbar';
 
+// TODO: move Head to its own component, being repited many times and it's always the same: DRY
 export default function Home() {
   return (
     <div className="container">
