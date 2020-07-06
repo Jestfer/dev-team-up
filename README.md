@@ -1,3 +1,13 @@
+## PROCESS
+
+1. Component hierarchy outline
+2. Build static version of the app (fake data) to determine how architecture fits the app needs
+3. Work on tests
+4. Add state needed for app to function
+5. Refactor: Where should state live? Differentiate between local state and Context hooks
+
+Source: [React Docs](https://reactjs.org/docs/thinking-in-react.html)
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
