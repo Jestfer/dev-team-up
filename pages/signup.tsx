@@ -1,15 +1,7 @@
-import {
-  Button,
-  Form,
-  Grid,
-  Header,
-  Image,
-  Message,
-  Segment,
-} from 'semantic-ui-react';
 import Head from 'next/head';
-import NavBar from '../components/navbar';
 import Link from 'next/link';
+import { Button, Form, Grid, Header, Message, Segment } from 'semantic-ui-react';
+import NavBar from '../components/navbar';
 
 const Signup = () => (
   <>
@@ -19,38 +11,18 @@ const Signup = () => (
       <Head>
         <title>Dev Team Up</title>
         <link rel="icon" href="/favicon.ico" />
-        <link
-          rel="stylesheet"
-          href="//cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css"
-        />
+        <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css" />
       </Head>
 
       <Grid.Column style={{ maxWidth: 450 }}>
         <Header as="h2" color="teal" textAlign="center">
-          <Image size="mini" src="/lore-ipsum-logo.jpg" /> Create a new account
+          Create a new account
         </Header>
         <Form size="large">
           <Segment stacked>
-            <Form.Input
-              fluid
-              icon="user"
-              iconPosition="left"
-              placeholder="E-mail address"
-            />
-            <Form.Input
-              fluid
-              icon="lock"
-              iconPosition="left"
-              placeholder="Password"
-              type="password"
-            />
-            <Form.Input
-              fluid
-              icon="user outline"
-              iconPosition="left"
-              placeholder="Username"
-              type="text"
-            ></Form.Input>
+            <Form.Input fluid icon="user" iconPosition="left" placeholder="E-mail address" />
+            <Form.Input fluid icon="lock" iconPosition="left" placeholder="Password" type="password" />
+            <Form.Input fluid icon="user outline" iconPosition="left" placeholder="Username" type="text"></Form.Input>
             <Form.Input
               fluid
               icon="js"

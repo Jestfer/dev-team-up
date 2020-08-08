@@ -8,10 +8,7 @@ export default function Home() {
       <Head>
         <title>Dev Team Up</title>
         <link rel="icon" href="/favicon.ico" />
-        <link
-          rel="stylesheet"
-          href="//cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css"
-        />
+        <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css" />
       </Head>
 
       <NavBar></NavBar>
@@ -19,9 +16,7 @@ export default function Home() {
       <main>
         <h1 className="title">Welcome to Dev Team Up!</h1>
 
-        <p className="description">
-          By and for developers looking to team up on tasks
-        </p>
+        <p className="description">By and for developers looking to team up on tasks</p>
       </main>
 
       <footer>
@@ -30,8 +25,7 @@ export default function Home() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className="logo" />
+          Powered by <img src="/vercel.svg" alt="Vercel Logo" className="logo" />
         </a>
       </footer>
 
@@ -111,9 +105,8 @@ export default function Home() {
         body {
           padding: 0;
           margin: 0;
-          font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
-            Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
-            sans-serif;
+          font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans,
+            Droid Sans, Helvetica Neue, sans-serif;
         }
 
         * {
