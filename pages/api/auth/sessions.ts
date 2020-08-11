@@ -12,26 +12,21 @@ export default withIronSession(
       const { email, password } = req.body;
 
       try {
-        const user = await User.where({ email }).findOne((err, user) => {
-          if (err) res.send(err);
-          return user;
-        });
-
-        if (!user) {
-          res.status(403).end();
-        }
+        const user = await User.where({ email }).findOne().exec();
+        if (!user) res.status(403).end();
 
         const validPassword = await user.validPassword(password);
-
-        if (!validPassword) {
-          res.status(403).end();
-        }
+        if (!validPassword) res.status(403).end();
 
         req.session.set('user', { email });
         await req.session.save();
         return res.status(201).end();
       } catch (e) {
-        res.end(e);
+        /* 
+          TODO: refactor and write a generic error handling function
+          TODO: error handling, with dictionary of error codes, shared for BE and FE
+        */
+        res.status(500).send(e.message);
       }
     }
 

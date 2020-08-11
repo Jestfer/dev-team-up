@@ -2,25 +2,22 @@ import User from '../../../lib/db/models/user';
 import { emailIsValid } from '../../../lib/controllers/userController';
 import crypto from 'crypto';
 import nodeMailer from '../../../lib/mailing/nodeMailer';
+import { NextApiRequest, NextApiResponse } from 'next';
 
-export default async (req, res) => {
+export default async (req: NextApiRequest, res: NextApiResponse) => {
   if (!emailIsValid(req.body.email)) return res.status(400).json({ message: 'The email format seems to be invalid' });
 
-  const existingUsers = await User.find(
-    { $or: [{ username: req.body.username.toLowerCase() }, { email: req.body.email.toLowerCase() }] },
-    (err, users) => {
-      if (err) return res.send(err);
-      return users;
-    }
-  );
-  if (existingUsers.length) return res.status(400).json({ message: 'User already exists' });
+  try {
+    const existingUsers = await User.find({
+      $or: [{ username: req.body.username.toLowerCase() }, { email: req.body.email.toLowerCase() }],
+    }).exec();
+    if (existingUsers.length) return res.status(400).json({ message: 'User already exists' });
 
-  const newUser = await generateUserInstance(req.body);
+    const newUser = await generateUserInstance(req.body);
 
-  newUser.save((err, user) => {
-    if (err) return console.error(err);
+    await newUser.save().exec();
 
-    // TODO: protocol (HTTP/HTTPS) is missing
+    // TODO: protocol (HTTP/HTTPS) is missing - in ENV var with URL
     const verificationLink = `${req.headers.host}/api/users/verify/${newUser.verificationCrypto}`;
     const emailInfo = {
       name: newUser.username,
@@ -30,8 +27,10 @@ export default async (req, res) => {
     };
     nodeMailer(emailInfo, 'verifyEmail');
 
-    return res.status(201).send({ name: user.username });
-  });
+    return res.status(201).send({ name: newUser.username });
+  } catch (e) {
+    res.status(500).send(e.message);
+  }
 };
 
 // TODO: improve this with deconstruction
