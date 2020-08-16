@@ -1,18 +1,21 @@
-import { withIronSession } from 'next-iron-session';
+import { withIronSession, Session } from 'next-iron-session';
 import User from '../../../lib/db/models/user';
+import { NextApiRequest, NextApiResponse } from 'next';
 
 export default withIronSession(
-  async (req, res) => {
+  // TODO, why this syntax does not work here and yes in sessionChecker?
+  // async ({ req, res }: { req: NextApiRequest & { session: Session }; res: NextApiResponse }) => {
+  async (req: NextApiRequest & { session: Session }, res: NextApiResponse) => {
     if (req.method === 'DELETE') {
       req.session.destroy();
       res.end();
     }
 
     if (req.method === 'POST') {
-      const { email, password } = req.body;
+      const { email, password }: { email: string; password: string } = req.body;
 
       try {
-        const user = await User.where({ email }).findOne().exec();
+        const user = await User.where('email', email).findOne().exec();
         if (!user) res.status(403).end();
 
         const validPassword = await user.validPassword(password);

@@ -7,7 +7,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   } = req;
 
   try {
-    const user = await User.where({ verificationCrypto: token }).findOne().exec();
+    const user = await User.where('verificationCrypto', token).findOne().exec();
 
     if (!user || user.verifiedAt) return res.status(400).send({ message: 'Unable to verify token' });
     user.verifiedAt = new Date();

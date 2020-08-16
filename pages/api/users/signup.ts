@@ -8,6 +8,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   if (!emailIsValid(req.body.email)) return res.status(400).json({ message: 'The email format seems to be invalid' });
 
   try {
+    // TODO: understand why .exec is allowed here and not on line 19
     const existingUsers = await User.find({
       $or: [{ username: req.body.username.toLowerCase() }, { email: req.body.email.toLowerCase() }],
     }).exec();
@@ -15,7 +16,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
     const newUser = await generateUserInstance(req.body);
 
-    await newUser.save().exec();
+    await newUser.save();
 
     // TODO: protocol (HTTP/HTTPS) is missing - in ENV var with URL
     const verificationLink = `${req.headers.host}/api/users/verify/${newUser.verificationCrypto}`;
