@@ -1,25 +1,30 @@
-import { withIronSession } from 'next-iron-session';
+import { withIronSession, Session } from 'next-iron-session';
+import { NextApiRequest, NextApiResponse } from 'next';
 
 export const sessionChecker = withIronSession(
-  async ({ req, res }) => {
+  async ({ req, res }: { req: NextApiRequest & { session: Session }; res: NextApiResponse }) => {
     const user = req.session.get('user');
 
-    /*
-      Return redirect from getServerSideProps, being discussed:
-      https://github.com/vercel/next.js/discussions/11281
-
-      Client-Side and Server-Side Redirects in Next.js:
-      https://dev.to/justincy/client-side-and-server-side-redirection-in-next-js-3ile
-    */
     if (!user) {
-      res.statusCode = 404;
-      res.end();
-      return { props: {} };
+      if (isPrivatePage(req.url)) {
+        // TODO: [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+        res.writeHead(302, { Location: '/login' });
+        res.end();
+        return { props: {} };
+      } else {
+        return { props: {} };
+      }
     }
 
-    return {
-      props: { user },
-    };
+    if (!isPrivatePage(req.url)) {
+      res.writeHead(302, { Location: '/dashboard' });
+      res.end();
+      return { props: {} };
+    } else {
+      return {
+        props: { user },
+      };
+    }
   },
   {
     cookieName: 'MYSITECOOKIE',
@@ -29,3 +34,9 @@ export const sessionChecker = withIronSession(
     password: process.env.APPLICATION_SECRET,
   }
 );
+
+const isPrivatePage = (url: string): boolean => {
+  const privatePages = ['/dashboard'];
+
+  return privatePages.includes(url);
+};

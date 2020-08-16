@@ -1,16 +1,9 @@
-import Head from 'next/head';
 import NavBar from '../components/navbar';
+import { sessionChecker } from '../lib/auth/sessionChecker';
 
-// TODO: move Head to its own component, being repited many times and it's always the same: DRY
 export default function Home() {
   return (
     <div className="container">
-      <Head>
-        <title>Dev Team Up</title>
-        <link rel="icon" href="/favicon.ico" />
-        <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css" />
-      </Head>
-
       <NavBar></NavBar>
 
       <main>
@@ -116,3 +109,5 @@ export default function Home() {
     </div>
   );
 }
+
+export const getServerSideProps = (ctx) => sessionChecker(ctx);
