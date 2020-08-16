@@ -1,25 +1,20 @@
-import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, { useContext, useRef } from 'react';
+import React, { useContext, useState } from 'react';
 import { Button, Form, Grid, Header, Message, Segment } from 'semantic-ui-react';
 import NavBar from '../components/navbar';
 import UserContext from '../components/user-context';
+import { sessionChecker } from '../lib/auth/sessionChecker';
 
 const Login = () => {
   const router = useRouter();
+  const [email, setEmail] = useState();
+  const [password, setPassword] = useState();
 
+  // TODO: rename => isLoggedIn, it's not really a user
   let { setUser } = useContext(UserContext);
 
-  const emailInput = useRef(null);
-  const passwordInput = useRef(null);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    const email = emailInput.current.value;
-    const password = passwordInput.current.value;
-
+  const handleSubmit = async () => {
     const response = await fetch('/api/auth/sessions', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -28,6 +23,7 @@ const Login = () => {
 
     if (response.ok) {
       setUser(true);
+      // TODO: this is an issue, state (user context) is lost when navigating from Login
       return router.push('/dashboard');
     }
   };
@@ -37,34 +33,29 @@ const Login = () => {
       <NavBar></NavBar>
 
       <Grid textAlign="center" style={{ height: '100vh' }} verticalAlign="middle">
-        <Head>
-          <title>Dev Team Up</title>
-          <link rel="icon" href="/favicon.ico" />
-          <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css" />
-        </Head>
-
         <Grid.Column style={{ maxWidth: 450 }}>
           <Header as="h2" color="teal" textAlign="center">
             Log in to your account
           </Header>
           <Form size="large" onSubmit={handleSubmit}>
             <Segment stacked>
-              {/* Cannot use Form.Input, it wraps elements in a functional components that does not expose ref */}
-              {/* <Form.Input fluid icon="user" iconPosition="left" placeholder="E-mail address" ref={emailInput} /> */}
-              {/* <Form.Input
+              <Form.Input
+                fluid
+                icon="user"
+                iconPosition="left"
+                placeholder="E-mail address"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              <Form.Input
                 fluid
                 icon="lock"
                 iconPosition="left"
                 placeholder="Password"
                 type="password"
-                ref={passwordInput}
-              /> */}
-              <Form.Field>
-                <input ref={emailInput} placeholder="E-mail address" />
-              </Form.Field>
-              <Form.Field>
-                <input ref={passwordInput} placeholder="Password" />
-              </Form.Field>
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
 
               <Button color="teal" fluid size="large" type="submit">
                 Log In
@@ -82,5 +73,7 @@ const Login = () => {
     </>
   );
 };
+
+export const getServerSideProps = (ctx) => sessionChecker(ctx);
 
 export default Login;
