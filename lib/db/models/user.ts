@@ -1,7 +1,7 @@
 import mongoose from '../db';
 import bcrypt from 'bcrypt';
 
-const userSchema = new mongoose.Schema({
+const userSchema: mongoose.Schema = new mongoose.Schema({
   email: String,
   password: String,
   username: String,
@@ -19,7 +19,18 @@ userSchema.methods.validPassword = function (password) {
   return bcrypt.compare(password, this.password);
 };
 
+interface IUser extends mongoose.Document {
+  email: string;
+  password: string;
+  username: string;
+  mainProgrammingLanguage: string;
+  verificationCrypto: string;
+  verifiedAt: null | Date;
+  generateHash: (password: string) => string;
+  validPassword: (password: string) => boolean;
+}
+
 // https://stackoverflow.com/a/43761258/8243590
-const User = mongoose.models.User || mongoose.model('User', userSchema);
+const User: mongoose.Model<IUser> = mongoose.models.User || mongoose.model<IUser>('User', userSchema);
 
 export default User;
